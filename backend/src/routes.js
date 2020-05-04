@@ -4,16 +4,22 @@ const IncidentController = require('./controllers/IncidentController');
 const ProfileController = require('./controllers/ProfileController');
 const SessionController = require('./controllers/SessionController');
 const routes = express.Router();
+const { validaSessao,
+    validaOng,
+    validaProfile,
+    validaDeletaIncident,
+    validaCriaIncident,
+    validaPage } = require('./validation')
 
-routes.post('/sessions', SessionController.create)
+routes.post('/sessions', validaSessao(), SessionController.create)
 
 routes.get('/ongs', OngController.index);
-routes.post('/ongs', OngController.create);
+routes.post('/ongs', validaOng(), OngController.create);
 
-routes.get('/incidents', IncidentController.index);
-routes.post('/incidents', IncidentController.create);
-routes.delete('/incidents/:id', IncidentController.delete);
+routes.get('/incidents', validaPage(), IncidentController.index);
+routes.post('/incidents', validaCriaIncident(), IncidentController.create);
+routes.delete('/incidents/:id', validaDeletaIncident(), IncidentController.delete);
 
-routes.get('/profile', ProfileController.index);
+routes.get('/profile', validaProfile(), ProfileController.index);
 
 module.exports = routes;
